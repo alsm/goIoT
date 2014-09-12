@@ -116,14 +116,14 @@ func main() {
 		fmt.Println("Go to the following link to see your device data;")
 		fmt.Println(quickstartBaseURL + config.DeviceID + "/sensor/")
 	} else {
-		var token *MQTT.SubscribeToken
+		var token MQTT.Token
 		fmt.Println("Subscribing for action messages")
 		token, err = client.Subscribe("iot-2/cmd/+/fmt/text", 0, actionHandler)
 		if err != nil {
 			fmt.Println("Error subscribing for action messages")
 		}
 		token.Wait()
-		for topic, qos := range token.Results() {
+		for topic, qos := range token.(*MQTT.SubscribeToken).Result() {
 			fmt.Println("Subscribed to", topic, "at Qos", qos)
 		}
 	}
