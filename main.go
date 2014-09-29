@@ -73,7 +73,7 @@ func SendData(client MQTT.Client, endChan chan struct{}) {
 		case <-ticker.C:
 			var p Payload
 			p.DataPoints.Load1, p.DataPoints.Load5, p.DataPoints.Load15 = getLoadAvg()
-			p.DataPoints.CPUTemp = getCPUTemp()
+			p.DataPoints.CPUTemp = getCPUTemp(host.CPUTempFile())
 			p.Timestamp = time.Now()
 			payloadBytes, err := json.Marshal(p)
 			if err == nil {
