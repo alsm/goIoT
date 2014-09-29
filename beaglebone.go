@@ -47,3 +47,7 @@ func (b *BeagleBone) LedsCycle(repeat int) {
 func (b *BeagleBone) Close() {
 	embd.CloseLED()
 }
+
+func (b *BeagleBone) CPUTempFile() string {
+	return "/sys/class/hwmon/hwmon0/device/temp1_input"
+}

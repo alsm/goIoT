@@ -6,14 +6,8 @@ import (
 	"strings"
 )
 
-var (
-	loadAvgFile string = "/proc/loadavg"
-	cpuTempFile string = "/sys/class/hwmon/hwmon0/device/temp1_input"
-	cpuinfoFile string = "/proc/cpuinfo"
-)
-
 func getLoadAvg() (float64, float64, float64) {
-	rawData, err := ioutil.ReadFile(loadAvgFile)
+	rawData, err := ioutil.ReadFile("/proc/loadavg")
 	if err != nil {
 		return 0, 0, 0
 	}
@@ -25,7 +19,7 @@ func getLoadAvg() (float64, float64, float64) {
 	return One, Five, Fifteen
 }
 
-func getCPUTemp() float64 {
+func getCPUTemp(cpuTempFile string) float64 {
 	rawData, err := ioutil.ReadFile(cpuTempFile)
 	if err != nil {
 		return 0

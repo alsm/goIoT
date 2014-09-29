@@ -10,6 +10,7 @@ type Platform interface {
 	LedsOff()
 	LedsToggle()
 	LedsCycle(int)
+	CPUTempFile() string
 	Close()
 }
 

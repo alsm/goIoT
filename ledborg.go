@@ -56,3 +56,7 @@ func (r *RPi) LedsCycle(repeat int) {
 func (r *RPi) Close() {
 	embd.CloseGPIO()
 }
+
+func (r *RPi) CPUTempFile() string {
+	return "/sys/class/thermal/thermal_zone0/temp"
+}
