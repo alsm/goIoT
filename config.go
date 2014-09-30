@@ -64,7 +64,7 @@ func ParseConfig(confFile string) *Config {
 	}
 
 	if config.DeviceName == "" {
-		config.DeviceName = "GoBeaglebone"
+		config.DeviceName = "GoIoT"
 	}
 
 	if config.PubTopic == "" {
@@ -85,6 +85,6 @@ func DefaultConfig(confVar *Config) *Config {
 	confVar.PubTopic = "iot-2/evt/status/fmt/json"
 	confVar.BrokerAddress = "tcp://messaging.quickstart.internetofthings.ibmcloud.com:1883"
 	confVar.ClientID = strings.Join([]string{"d", "quickstart", confVar.Type, confVar.DeviceID}, ":")
-	confVar.DeviceName = "GoBeaglebone"
+	confVar.DeviceName = "GoIoT"
 	return confVar
 }

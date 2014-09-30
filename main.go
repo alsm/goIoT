@@ -86,7 +86,6 @@ func SendData(client MQTT.Client, endChan chan struct{}) {
 }
 
 func main() {
-	var err error
 	endChan := make(chan struct{})
 	host.LedsOff()
 
@@ -101,9 +100,8 @@ func main() {
 		opts.SetUsername(config.Username).SetPassword(config.AuthToken).SetTlsConfig(tlsConfig)
 	}
 	client := MQTT.NewClient(opts)
-	_, err = client.Start()
-	if err != nil {
-		fmt.Println(err.Error())
+	if token := client.Connect(); token.Wait() && token.Error() != nil {
+		fmt.Println(token.Error())
 		os.Exit(1)
 	}
 	fmt.Println("Connected")
@@ -118,13 +116,12 @@ func main() {
 	} else {
 		var token MQTT.Token
 		fmt.Println("Subscribing for action messages")
-		token, err = client.Subscribe("iot-2/cmd/+/fmt/text", 0, actionHandler)
-		if err != nil {
+		if token = client.Subscribe("iot-2/cmd/+/fmt/text", 0, actionHandler); token.Wait() && token.Error() != nil {
 			fmt.Println("Error subscribing for action messages")
-		}
-		token.Wait()
-		for topic, qos := range token.(*MQTT.SubscribeToken).Result() {
-			fmt.Println("Subscribed to", topic, "at Qos", qos)
+		} else {
+			for topic, qos := range token.(*MQTT.SubscribeToken).Result() {
+				fmt.Println("Subscribed to", topic, "at Qos", qos)
+			}
 		}
 	}
 
