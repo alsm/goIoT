@@ -49,7 +49,7 @@ func init() {
 	}
 }
 
-func actionHandler(client *MQTT.MqttClient, message MQTT.Message) {
+func actionHandler(client *MQTT.Client, message MQTT.Message) {
 	fmt.Println("Received action message on", message.Topic(), "-", string(message.Payload()))
 	action := strings.ToLower(string(message.Payload()))
 	switch action {
@@ -64,7 +64,7 @@ func actionHandler(client *MQTT.MqttClient, message MQTT.Message) {
 	}
 }
 
-func SendData(client MQTT.Client, endChan chan struct{}) {
+func SendData(client *MQTT.Client, endChan chan struct{}) {
 	ticker := time.NewTicker(1 * time.Second)
 	for {
 		select {
@@ -94,10 +94,10 @@ func main() {
 	fmt.Println("Device ID:", config.DeviceID)
 	fmt.Println("Connecting to MQTT broker:", config.BrokerAddress)
 
-	opts := MQTT.NewClientOptions().AddBroker(config.BrokerAddress).SetClientId(config.ClientID)
+	opts := MQTT.NewClientOptions().AddBroker(config.BrokerAddress).SetClientID(config.ClientID)
 	if !config.QuickStart {
 		tlsConfig := &tls.Config{InsecureSkipVerify: true, ClientAuth: tls.NoClientCert}
-		opts.SetUsername(config.Username).SetPassword(config.AuthToken).SetTlsConfig(tlsConfig)
+		opts.SetUsername(config.Username).SetPassword(config.AuthToken).SetTLSConfig(tlsConfig)
 	}
 	client := MQTT.NewClient(opts)
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
